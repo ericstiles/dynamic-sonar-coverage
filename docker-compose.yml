@@ -1,31 +1,42 @@
-version: "2"
-
+version: "3"
 services:
   sonarqube:
     image: sonarqube
+    container_name: sonar
     ports:
       - "9000:9000"
     networks:
-      - sonarnet
+      sonarnet:
+        ipv4_address: 172.19.0.14
     environment:
       - sonar.jdbc.url=jdbc:postgresql://db:5432/sonar
     volumes:
       - sonarqube_conf:/opt/sonarqube/conf
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions
-
-  nginx:
-    image: nginx:latest
+  node:
+    image: node:latest
+    container_name: metrics_manager
+    environment:
+      - COVERAGE_CEILING=85
+      - GATE_ID_COVERAGE=6
+      - GUEST_PORT=3000
+      - SONAR_HOST=172.19.0.14
+      - SONAR_PASSWORD=admin
+      - SONAR_PORT=9000
+      - SONAR_USERNAME=admin
     ports:
-      - "8080:80"
-      - "8443:443"
-#    volumes:
-#      - ./data/nginx:/etc/nginx/conf.d
-
+      - "3000:3000"
     volumes:
-    - ./nginx-data/html:/usr/share/nginx/html
+      - ./src/node:/node
+      - ./node_modules:/node/node_modules
+    command: /node/node_modules/.bin/nodemon /node/index.js
+    networks:
+      sonarnet:
+        ipv4_address: 172.19.0.15
   db:
     image: postgres
+    container_name: sonar_pg_db
     networks:
       - sonarnet
     environment:
@@ -46,3 +57,4 @@ volumes:
   sonarqube_extensions:
   postgresql:
   postgresql_data:
+  node_modules:

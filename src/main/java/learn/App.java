@@ -1,13 +1,17 @@
-package main.java.learn;
+package learn;
 
-/**
- * Hello world!
- *
- */
 public class App 
 {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+    public Integer addition(Integer one, Integer two){
+        return one + two;
     }
+
+    public Integer subtraction(Integer one, Integer two){
+        return one - two;
+    }
+
+    public Integer multiplication(Integer one, Integer two){
+        return one * two;
+    }
+
 }
