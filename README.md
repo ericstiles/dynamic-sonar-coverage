@@ -21,6 +21,7 @@ h2 instance provided for testing purposes.
 In this example a single condition uses the `coverage` metric in a custom qualityGate
 A webhook is setup that is triggered when a project analyses occurs.  The webhook is to a node server.
 * Sample metric json object (not the whole json object, though) sent through the webhook
+
        {
           metric: 'coverage',
           operator: 'LESS_THAN',
