@@ -1,9 +1,9 @@
-#Background
-##Problem
+# Background
+## Problem
 I was interested in finding out a way to dynamically increase minimum code coverage requirements as we increased code 
 coverage.  Sonar does not provide this type of functionality.
 
-##Solution
+## Solution
 Sonar does provide an api (https://sonarcloud.io/web_api/) that can be utilized to manage a project, qualityGates and 
 conditions as well the ability for event processing utilizing a web hook.
 
@@ -11,11 +11,11 @@ This repository is a working example to demonstrates increasing minimum code cov
 in the application increases.  Additionally, there a maximum threshold setting for the `coverage` metric that sonar
 will not go over even when the application code coverage does.
 
-###The example
-####Docker Compose File
+### The example
+#### Docker Compose File
 In docker-compose.yml file all servers, volumes are configured. Ports and IP Addresses are configured.
 
-####Sonar server
+#### Sonar server
 The Sonar Server uses the OOB image provided by Sonarqube.  It is backed by a Postgres DB rather than the installed
 h2 instance provided for testing purposes.
 In this example a single condition uses the `coverage` metric in a custom qualityGate
@@ -29,7 +29,7 @@ A webhook is setup that is triggered when a project analyses occurs.  The webhoo
           errorThreshold: '75'
        }
 
-####Node server
+#### Node server
 The node server contains the logic that checks for
 * any error states and logs those out to the console
 * whether the current coverage value is greater than the set threshold and less than the maximum threshold
@@ -37,13 +37,13 @@ The node server contains the logic that checks for
 When coverage value meets the criteria a REST call back to the sonar server updates the errorThreshold with the
 floor value of the coverage (Math.floor is used since the coverage will, likely, be a decimal).
 
-#Working example
+# Working example
 Some of the steps below are listed to specifically get this example and users should follow a different process for 
 rolling out a working model. Two terminals are needed: One from for the docker containers running through 
 docker compose and another to run commands in.
 
 All commands should be run from the project root folder.
-##Prep
+## Prep
 * Install the necessary node modules:
 ```bash
 $ npm install
@@ -140,7 +140,7 @@ fails.  This demonstrates that the webhook is working.
       metrics_manager |   errorThreshold: '60'
       metrics_manager | }
 
-##Test example
+## Test example
 Now we'll update the Code Coverage in our java application and run maven again.
 
 * In the `AppTest.java` class uncomment the following method: 
@@ -174,7 +174,7 @@ in the sonar console), the `coverage` metric is only set to 85.
 curl -u admin:admin  -d "id=14&metric=coverage&error=50&op=LT" -X POST http://localhost:9000/api/qualitygates/update_condition
 ```
 
-#Helpful Links
+# Helpful Links
 
 * https://docs.docker.com/compose/compose-file/
 * https://sonarcloud.io/web_api/
